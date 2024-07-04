@@ -22,4 +22,41 @@ model Product {
 
   belongsToId String
   belongsTo   User   @relation(fields: [belongsToId], references: [id])
+
+  updates Update[]
+}
+
+enum StatusUpdate {
+  IN_PROGRESS
+  SHIPPED
+  DEPRECATED
+}
+
+model Update {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+
+  title   String
+  body    String
+  status  StatusUpdate @default(IN_PROGRESS)
+  version String?
+  asset   String?
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  updatePoints UpdatePoint[]
+}
+
+model UpdatePoint {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+
+  name        String
+  description String
+
+  updateId String
+  update   Update @relation(fields: [updateId], references: [id])
 }
