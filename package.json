@@ -1,20 +1,25 @@
 {
   "name": "express-api-design",
   "version": "1.0.0",
-  "main": "index.js",
-  "type": "module",
+  "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js"
+    "start": "ts-node index.ts",
+    "dev": "nodemon index.ts"
   },
   "keywords": [],
   "author": "Techie Emma",
   "license": "MIT",
   "description": "A simple express API design",
   "devDependencies": {
-    "express": "^4.19.2"
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.9",
+    "prisma": "^5.16.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.3"
   },
   "dependencies": {
+    "express": "^4.19.2",
     "nodemon": "^3.1.4"
   }
 }
