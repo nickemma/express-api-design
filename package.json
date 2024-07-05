@@ -19,6 +19,7 @@
     "@types/morgan": "^1.9.9",
     "@types/node": "^20.14.9",
     "@types/nodemailer": "^6.4.15",
+    "express-validator": "^7.1.0",
     "prisma": "^5.16.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.3"

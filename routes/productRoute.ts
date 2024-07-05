@@ -1,4 +1,6 @@
 import { Router } from "express";
+import { body } from "express-validator";
+import { validate } from "../middleware/errorHandler";
 
 const router = Router();
 
@@ -20,8 +22,7 @@ router.get('/product/:id', (req, res) => {
 router.post('/product', (req, res) => {
 });
 
-router.put('/product/:id', (req, res) => {
-});
+router.put('/product/:id', body('body').isString(), validate);
 
 router.delete('/product/:id', (req, res) => {
 });
