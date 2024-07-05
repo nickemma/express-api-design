@@ -8,11 +8,23 @@ generator client {
 }
 
 model User {
-  id        String    @id @default(uuid())
-  createdAt DateTime  @default(now())
-  username  String    @unique
-  password  String
-  products  Product[]
+  id                 String               @id @default(uuid())
+  createdAt          DateTime             @default(now())
+  email              String               @unique
+  name               String
+  password           String
+  otp                String?
+  otpExpiresAt       DateTime?
+  passwordResetToken PasswordResetToken[]
+  products           Product[]
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  expiresIn DateTime
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model Product {
