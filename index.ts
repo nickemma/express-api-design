@@ -5,6 +5,8 @@ import cors from 'cors';
 import morgan from 'morgan';
 
 import router from './routes/router';
+import { createNewUser, signin, updatePassword } from './handler/user_handler';
+import protect from './middleware/protect';
 
 const app = express();
 
@@ -25,7 +27,11 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 //============= Routes
-app.use('/api', router);
+app.use('/api', protect, router);
+
+app.post('/users/register', createNewUser);
+app.post('/users/signin', signin);
+app.post('/users/update-password', protect, updatePassword);
 
 //============= Server
 const PORT = process.env.PORT || 5000;

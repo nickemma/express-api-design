@@ -24,7 +24,6 @@ const protect = async (
     // Verify token
     const decoded = jwt.verify(token, secretKey as Secret);
     req.user = decoded;
-    console.log(decoded, "decoded token");
     next();
   } catch (error) {
     console.error(error);
