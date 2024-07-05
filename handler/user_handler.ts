@@ -24,15 +24,6 @@ const generateToken = (user: any) => {
 };
 
 /*
- * @desc    Generate a 6-digit OTP
- * @access  Private
- */
-
-const generateOTP = () => {
-  return Math.floor(100000 + Math.random() * 900000).toString();
-};
-
-/*
  * @route   POST users/signup
  * @desc    Register a new user
  * @access  Public

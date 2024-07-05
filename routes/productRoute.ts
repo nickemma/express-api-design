@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { body, oneOf } from "express-validator";
+import { body } from "express-validator";
 import { validate } from "../middleware/errorHandler";
 import { StatusUpdate } from "@prisma/client";
 
@@ -75,6 +75,7 @@ router.put(
   "/updatepoint/:id",
   body("name").optional().isString(),
   body("description").optional().isString(),
+  body("updatedId").exists().isString(),
   validate
 );
 
