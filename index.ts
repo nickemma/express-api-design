@@ -31,7 +31,6 @@ app.use('/api', protect, router);
 
 app.post('/users/register', createNewUser);
 app.post('/users/signin', signin);
-app.post('/users/validate-otp', signin);
 app.post('/users/update-password', protect, updatePassword);
 app.post('/users/forgot-password', forgotPassword);
 app.post('/users/reset-password', resetPassword);
