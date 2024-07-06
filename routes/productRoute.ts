@@ -2,6 +2,13 @@ import { Router } from "express";
 import { body } from "express-validator";
 import { validate } from "../middleware/errorHandler";
 import { StatusUpdate } from "@prisma/client";
+import {
+  createProduct,
+  deleteProduct,
+  getAllProducts,
+  getProductById,
+  updateProduct,
+} from "../handler/product_handler";
 
 const router = Router();
 
@@ -13,16 +20,14 @@ const router = Router();
  * DELETE /api/product/:id
  **/
 
-router.get("/product", (req, res) => {
-  res.json({ message: "Get all products" });
-});
+router.get("/product", getAllProducts);
 
-router.get("/product/:id", (req, res) => {});
+router.get("/product/:id", getProductById);
 
-router.post("/product", body("name").isString(), validate);
-router.put("/product/:id", body("name").isString(), validate);
+router.post("/product", body("name").isString(), validate, createProduct);
+router.put("/product/:id", body("name").isString(), validate, updateProduct);
 
-router.delete("/product/:id", (req, res) => {});
+router.delete("/product/:id", deleteProduct);
 
 /**
  * GET /api/update
@@ -40,6 +45,7 @@ router.post(
   "/update",
   body("title").exists().isString(),
   body("body").exists().isString(),
+  body('productId').exists().isString(),
   validate
 );
 router.put(
