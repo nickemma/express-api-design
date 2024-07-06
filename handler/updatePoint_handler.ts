@@ -4,12 +4,12 @@ import prisma from "../types/db";
 import { StatusUpdate } from "@prisma/client";
 
 /*
- * @route   GET api/update
- * @desc    Get all updates
+ * @route   GET api/updatepoint
+ * @desc    Get all updates points
  * @access  Private
  */
 
-export const getUpdates = async (
+export const getPoints = async (
   req: AuthenticatedRequest,
   res: Response
 ) => {
@@ -42,7 +42,7 @@ export const getUpdates = async (
     if (updated.length === 0) {
       return res.status(200).json({ message: "No updates found" });
     }
-
+    
     res.json({ data: updated});
   } catch (error: any) {
     throw new Error(error.message);
@@ -50,12 +50,12 @@ export const getUpdates = async (
 };
 
 /*
- * @route   GET api/update/:id
- * @desc    Get a update by id
+ * @route   GET api/updatepoint/:id
+ * @desc    Get a update point by id
  * @access  Private
  */
 
-export const getUpdateById = async (
+export const getPointById = async (
   req: AuthenticatedRequest,
   res: Response
 ) => {
@@ -79,12 +79,12 @@ export const getUpdateById = async (
 };
 
 /*
- * @route   POST api/update
- * @desc    Create a new update
+ * @route   POST api/updatepoint
+ * @desc    Create a new update point
  * @access  Private
  */
 
-export const createUpdate = async (req: Request, res: Response) => {
+export const createPoint = async (req: Request, res: Response) => {
   try {
     const product = await prisma.product.findUnique({
         where: {
@@ -110,12 +110,12 @@ export const createUpdate = async (req: Request, res: Response) => {
 };
 
 /*
- * @route   PUT api/update/:id
- * @desc    Update an update by id
+ * @route   PUT api/updatepoint/:id
+ * @desc    Update a point by id
  * @access  Private
  */
 
-export const updateUpdate = async (req: Request, res: Response) => {
+export const updatePoint = async (req: Request, res: Response) => {
   try {
     const products = await prisma.product.findMany({
       where: {
@@ -161,12 +161,12 @@ export const updateUpdate = async (req: Request, res: Response) => {
 };
 
 /*
- * @route   DELETE api/update/:id
- * @desc    Delete a update by id
+ * @route   DELETE api/updatepoint/:id
+ * @desc    Delete a point by id
  * @access  Private
  */
 
-export const deleteUpdate = async (req: Request, res: Response) => {
+export const deletePoint = async (req: Request, res: Response) => {
  try {
     const products = await prisma.product.findMany({
       where: {

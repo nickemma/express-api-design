@@ -9,7 +9,20 @@ import {
   getProductById,
   updateProduct,
 } from "../handler/product_handler";
-import { createUpdate, deleteUpdate, getUpdateById, getUpdates, updateUpdate } from "../handler/update_handler";
+import {
+  createUpdate,
+  deleteUpdate,
+  getUpdateById,
+  getUpdates,
+  updateUpdate,
+} from "../handler/update_handler";
+import {
+  createPoint,
+  deletePoint,
+  getPointById,
+  getPoints,
+  updatePoint,
+} from "../handler/updatePoint_handler";
 
 const router = Router();
 
@@ -46,7 +59,7 @@ router.post(
   "/update",
   body("title").exists().isString(),
   body("body").exists().isString(),
-  body('productId').exists().isString(),
+  body("productId").exists().isString(),
   validate,
   createUpdate
 );
@@ -71,24 +84,26 @@ router.delete("/update/:id", deleteUpdate);
  * DELETE /api/updatepoint/:id
  **/
 
-router.get("/updatepoint", (req, res) => {});
+router.get("/updatepoint", getPoints);
 
-router.get("/updatepoint/:id", (req, res) => {});
+router.get("/updatepoint/:id", getPointById);
 
 router.post(
   "/updatepoint",
   body("name").exists().isString(),
   body("description").exists().isString(),
-  validate
+  validate,
+  createPoint
 );
 router.put(
   "/updatepoint/:id",
   body("name").optional().isString(),
   body("description").optional().isString(),
   body("updatedId").exists().isString(),
-  validate
+  validate,
+  updatePoint
 );
 
-router.delete("/updatepoint/:id", (req, res) => {});
+router.delete("/updatepoint/:id", deletePoint);
 
 export default router;
