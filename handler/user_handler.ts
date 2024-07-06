@@ -97,9 +97,8 @@ export const signin = async (req: Request, res: Response) => {
  * @desc    Update user password
  * @access  Private
  */
-
-export const updatePassword = async (req: Request, res: Response) => {
-  const { email, currentPassword, newPassword } = req.body;
+export const updateUserDetails = async (req: Request, res: Response) => {
+  const { email, currentPassword, newPassword, newName } = req.body;
 
   try {
     const user = await prisma.user.findUnique({
@@ -109,33 +108,85 @@ export const updatePassword = async (req: Request, res: Response) => {
     if (!user) {
       return res.status(400).json({ error: "User not found" });
     }
+
     // validations here
-    if (!currentPassword || !newPassword) {
-      return res.status(400).json({ message: "Please add old & new password" });
+    if (!currentPassword && !newPassword && !newName) {
+      return res.status(400).json({ message: "No details provided to update" });
     }
 
-    const isPasswordValid = await comparePassword(
-      currentPassword,
-      user.password
-    );
-    if (!isPasswordValid) {
-      return res.status(400).json({ error: "Please enter correct password" });
+    // Check password if provided
+    if (currentPassword) {
+      const isPasswordValid = await comparePassword(
+        currentPassword,
+        user.password
+      );
+      if (!isPasswordValid) {
+        return res.status(400).json({ error: "Please enter correct password" });
+      }
     }
 
-    const hashedNewPassword = await hashedPassword(newPassword);
+    const updatedData: { password?: string; name?: string } = {};
+
+    if (newPassword) {
+      updatedData.password = await hashedPassword(newPassword);
+    }
+
+    if (newName) {
+      updatedData.name = newName;
+    }
+
     await prisma.user.update({
       where: { email },
-      data: { password: hashedNewPassword },
+      data: updatedData,
     });
 
     res
       .status(200)
-      .json({ message: "Password changed successfully, Please login" });
+      .json({ message: "User details updated successfully, Please login" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Something went wrong" });
   }
 };
+
+// export const updatePassword = async (req: Request, res: Response) => {
+//   const { email, currentPassword, newPassword } = req.body;
+
+//   try {
+//     const user = await prisma.user.findUnique({
+//       where: { email },
+//     });
+
+//     if (!user) {
+//       return res.status(400).json({ error: "User not found" });
+//     }
+//     // validations here
+//     if (!currentPassword || !newPassword) {
+//       return res.status(400).json({ message: "Please add old & new password" });
+//     }
+
+//     const isPasswordValid = await comparePassword(
+//       currentPassword,
+//       user.password
+//     );
+//     if (!isPasswordValid) {
+//       return res.status(400).json({ error: "Please enter correct password" });
+//     }
+
+//     const hashedNewPassword = await hashedPassword(newPassword);
+//     await prisma.user.update({
+//       where: { email },
+//       data: { password: hashedNewPassword },
+//     });
+
+//     res
+//       .status(200)
+//       .json({ message: "Password changed successfully, Please login" });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Something went wrong" });
+//   }
+// };
 
 /*
  * @route   POST users/forgot-password
