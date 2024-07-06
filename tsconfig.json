@@ -3,11 +3,13 @@
         "target": "es5",
         "sourceMap": true,
         "outDir": "./dist",
-        "module": "CommonJS",
+        "rootDir": "./src",
         "strict": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
+        "declaration": true,
         "forceConsistentCasingInFileNames": true,
         "lib": ["esnext"],
-    }
+    },
+    "include": ["src/**/*.ts"],
 }

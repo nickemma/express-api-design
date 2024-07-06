@@ -3,6 +3,7 @@ dotenv.config();
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
+import config from './config';
 
 import userRoute from './routes/userRoute';
 import productRoute from './routes/productRoute';
@@ -31,8 +32,7 @@ app.use('/users', userRoute);
 app.use('/api', protect, productRoute);
 
 //============= Server
-const PORT = process.env.PORT || 5000;
 
-app.listen(5000, () => {
-  console.log(`Server running on port http://localhost:${PORT}`);
+app.listen(config.PORT, () => {
+  console.log(`API Design On Port http://localhost:${config.PORT}`);
 });
