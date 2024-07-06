@@ -39,6 +39,10 @@ export const getUpdates = async (
       return [...allUpdates, ...product.updates];
     }, []);
 
+    if (updated.length === 0) {
+      return res.status(200).json({ message: "No updates found" });
+    }
+    
     res.json({ data: updated});
   } catch (error: any) {
     throw new Error(error.message);
@@ -63,6 +67,11 @@ export const getUpdateById = async (
         id,
       },
     });
+
+    if (!update) {
+      return res.status(404).json({ message: "Update not found" });
+    }
+
     res.json({ data: update });
   } catch (error: any) {
     throw new Error(error.message);
@@ -88,9 +97,13 @@ export const createUpdate = async (req: Request, res: Response) => {
     }
 
     const created = await prisma.update.create({
-        data: req.body,
+        data: {
+            title: req.body.title,
+            body: req.body.body,
+            product: {connect: {id: product.id}},
+        }
     });
-    res.json({ data: created });
+    res.json({ data: created, message: "Update Created successfully"});
   } catch (error: any) {
     throw new Error(error.message);
   }
@@ -103,20 +116,45 @@ export const createUpdate = async (req: Request, res: Response) => {
  */
 
 export const updateUpdate = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const { name } = req.body;
-
   try {
-    const updated = await prisma.product.update({
+    const products = await prisma.product.findMany({
       where: {
-        id,
-        belongsToId: (req as AuthenticatedRequest).user?.id,
+       belongsToId: (req as AuthenticatedRequest).user?.id,
       },
-      data: {
-        name,
-      },
+     include: {
+         updates: true,
+     },
     });
-    res.json({ data: updated });
+
+   type UpdateType = {
+      id: string;
+      createdAt: Date;
+      updatedAt: Date;
+      title: string;
+      body: string;
+      status: StatusUpdate;
+      version: string | null;
+      asset: string | null;
+      productId: string;
+    };
+
+    const allUpdates = products.reduce((updates: UpdateType[], product) => {
+      return [...updates, ...product.updates];
+    }, []);
+
+    const matchedUpdate  = allUpdates.find((update) => update.id === req.params.id);
+
+    if(!matchedUpdate ) {
+      return res.status(404).json({ message: "Update not found" });
+    }
+    
+    const updatedUpdate = await prisma.update.update({
+        where: {
+            id: req.params.id,
+        },
+        data: req.body,
+    });
+    res.json({ data: updatedUpdate, message: "Updated successfully"});
   } catch (error: any) {
     throw new Error(error.message);
   }
@@ -129,16 +167,46 @@ export const updateUpdate = async (req: Request, res: Response) => {
  */
 
 export const deleteUpdate = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
-  try {
-    const deleted = await prisma.product.delete({
+ try {
+    const products = await prisma.product.findMany({
       where: {
-        id,
         belongsToId: (req as AuthenticatedRequest).user?.id,
       },
+     include: {
+         updates: true,
+     },
     });
-    res.json({ data: deleted });
+
+   type UpdateType = {
+      id: string;
+      createdAt: Date;
+      updatedAt: Date;
+      title: string;
+      body: string;
+      status: StatusUpdate;
+      version: string | null;
+      asset: string | null;
+      productId: string;
+    };
+
+    const allUpdates = products.reduce((updates: UpdateType[], product) => {
+      return [...updates, ...product.updates];
+    }, []);
+
+    const matchedUpdate  = allUpdates.find((update) => update.id === req.params.id);
+
+    if(!matchedUpdate ) {
+      return res.status(404).json({ message: "Update not found" });
+    }
+
+    const deleted = await prisma.update.delete({
+        where: {
+            id: req.params.id,
+        },
+    });
+
+    res.json({ data: deleted, message: "Deleted successfully"});
+
   } catch (error: any) {
     throw new Error(error.message);
   }

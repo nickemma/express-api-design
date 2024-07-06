@@ -51,6 +51,11 @@ export const getProductById = async (
         belongsToId: req.user?.id,
       },
     });
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
     res.json({ data: product });
   } catch (error: any) {
     throw new Error(error.message);
@@ -79,7 +84,11 @@ export const createProduct = async (req: Request, res: Response) => {
         belongsToId: authReq.user.id,
       },
     });
-    res.status(201).json({ data: product });
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.status(201).json({ data: product, message: "Product created successfully"});
   } catch (error: any) {
     throw new Error(error.message);
   }
@@ -105,7 +114,11 @@ export const updateProduct = async (req: Request, res: Response) => {
         name,
       },
     });
-    res.json({ data: updated });
+
+    if (!updated) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.json({ data: updated, message: "Product updated successfully"});
   } catch (error: any) {
     throw new Error(error.message);
   }
@@ -127,7 +140,11 @@ export const deleteProduct = async (req: Request, res: Response) => {
         belongsToId: (req as AuthenticatedRequest).user?.id,
       },
     });
-    res.json({ data: deleted });
+
+    if (!deleted) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.json({ data: deleted, message: "Product deleted successfully"});
   } catch (error: any) {
     throw new Error(error.message);
   }

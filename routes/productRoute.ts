@@ -9,6 +9,7 @@ import {
   getProductById,
   updateProduct,
 } from "../handler/product_handler";
+import { createUpdate, deleteUpdate, getUpdateById, getUpdates, updateUpdate } from "../handler/update_handler";
 
 const router = Router();
 
@@ -37,27 +38,30 @@ router.delete("/product/:id", deleteProduct);
  * DELETE /api/update/:id
  **/
 
-router.get("/update", (req, res) => {});
+router.get("/update", getUpdates);
 
-router.get("/update/:id", (req, res) => {});
+router.get("/update/:id", getUpdateById);
 
 router.post(
   "/update",
   body("title").exists().isString(),
   body("body").exists().isString(),
   body('productId').exists().isString(),
-  validate
+  validate,
+  createUpdate
 );
+
 router.put(
   "/update/:id",
   body("title").optional().isString(),
   body("body").optional().isString(),
   body("status").optional().isIn(Object.values(StatusUpdate)),
   body("version").optional().isString(),
-  validate
+  validate,
+  updateUpdate
 );
 
-router.delete("/update/:id", (req, res) => {});
+router.delete("/update/:id", deleteUpdate);
 
 /**
  * GET /api/updatepoint

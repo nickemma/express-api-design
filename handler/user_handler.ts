@@ -53,7 +53,7 @@ export const createNewUser = async (req: Request, res: Response) => {
     });
 
     const token = generateToken(user);
-    res.status(201).json({ token });
+    res.status(201).json({ token, message: "Registered successfully"});
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Something went wrong" });
@@ -85,7 +85,7 @@ export const signin = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Invalid Email or Password" });
     }
 
-    res.status(200).json({ token: generateToken(user) });
+    res.status(200).json({ token: generateToken(user), message: "Logged in successfully" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Something went wrong" });
