@@ -33,6 +33,7 @@ app.use('/api', protect, productRoute);
 
 //============= Server
 
-app.listen(config.PORT, () => {
-  console.log(`API Design On Port http://localhost:${config.PORT}`);
+app.listen(config.port, () => {
+  console.log(`API Design On Port http://localhost:${config.port}`);
 });
+
