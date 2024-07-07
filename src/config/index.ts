@@ -1,23 +1,27 @@
+import { config } from 'dotenv';
 import merge from 'lodash.merge';
+
+// Load environment variables from .env file
+config();
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 const stage = process.env.STAGE || 'local';
 
-let envConfig 
+let envConfig;
 
 if (stage === 'production') {
-  envConfig = require('./prod').default;
+    envConfig = require('./prod').default;
 } else if (stage === 'testing') {
-  envConfig = require('./testing').default;
+    envConfig = require('./testing').default;
 } else {
-  envConfig = require('./local').default;
+    envConfig = require('./local').default;
 }
 
-export default merge({ 
+export default merge({
     stage,
     env: process.env.NODE_ENV,
-    port: 5000,
-        jwt: process.env.JWT_SECRET,
-        dbURL: process.env.DATABASE_URL
- }, envConfig);
+    port: process.env.PORT || 5000,
+    jwt: process.env.JWT_SECRET,
+    dbURL: process.env.DATABASE_URL
+}, envConfig);
